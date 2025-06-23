@@ -58,8 +58,6 @@ app.post('/api/users/:_id/exercises', (req, res) => {
 
 app.get('/api/users/:_id/logs', (req, res) => {
   let { from, to, limit } = req.query;
-  //from=2025-06-23&&to=2025-06-23&&limit=2
-  console.log(from + ' ' + to + ' ' + limit)
   const _id = req.params._id;
   const userInfo = userData.filter((user) => user._id === _id)[0];
   let exerciseInfo = exerciseData.filter((exercise) => exercise._id === _id);
@@ -67,23 +65,14 @@ app.get('/api/users/:_id/logs', (req, res) => {
   if (from !== undefined) {
     dateFrom = new Date(from);
     exerciseInfo = exerciseInfo.filter((exercise) => new Date(exercise.date) >= dateFrom);
-    console.log('1')
-    console.log(dateFrom)
-    console.log(exerciseInfo);
   } 
   if (to !== undefined) {
     dateTo = new Date(to);
     exerciseInfo = exerciseInfo.filter((exercise) => new Date(exercise.date) <= dateTo);
-    console.log('2')
-    console.log(dateTo)
-    console.log(exerciseInfo);
   } 
   if (limit !== undefined) {
     currLimit = Number(limit);
     exerciseInfo = exerciseInfo.slice(0, currLimit);
-    console.log('3')
-    console.log(currLimit)
-    console.log(exerciseInfo);
   } 
   
   const exerciseInfoAgg = exerciseInfo.map((exercise) => {return {
