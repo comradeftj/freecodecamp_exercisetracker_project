@@ -67,16 +67,19 @@ app.get('/api/users/:_id/logs', (req, res) => {
   if (from !== undefined) {
     from = new Date(from).toDateString();
     exerciseInfo = exerciseInfo.filter((exercise) => exercise.date >= from);
+    console.log('1')
     console.log(exerciseInfo);
   } 
   if (to !== undefined) {
     to = new Date(to).toDateString();
     exerciseInfo = exerciseInfo.filter((exercise) => exercise.date <= to);
+    console.log('2')
     console.log(exerciseInfo);
   } 
   if (limit !== undefined) {
     limit = Number(limit);
     exerciseInfo = exerciseInfo.slice(0, limit);
+    console.log('3')
     console.log(exerciseInfo);
   } 
   
@@ -85,6 +88,7 @@ app.get('/api/users/:_id/logs', (req, res) => {
     duration: exercise.duration,
     date: exercise.date,
   }});
+  console.log('4')
   console.log(exerciseInfoAgg);
   res.json({
     username: userInfo.username,
