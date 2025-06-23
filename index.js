@@ -67,14 +67,17 @@ app.get('/api/users/:_id/logs', (req, res) => {
   if (from !== undefined) {
     from = new Date(from).toDateString();
     exerciseInfo = exerciseInfo.filter((exercise) => exercise.date >= from);
+    console.log(exerciseInfo);
   } 
   if (to !== undefined) {
     to = new Date(to).toDateString();
     exerciseInfo = exerciseInfo.filter((exercise) => exercise.date <= to);
+    console.log(exerciseInfo);
   } 
   if (limit !== undefined) {
     limit = Number(limit);
     exerciseInfo = exerciseInfo.slice(0, limit);
+    console.log(exerciseInfo);
   } 
   
   const exerciseInfoAgg = exerciseInfo.map((exercise) => {return {
@@ -82,7 +85,7 @@ app.get('/api/users/:_id/logs', (req, res) => {
     duration: exercise.duration,
     date: exercise.date,
   }});
-
+  console.log(exerciseInfoAgg);
   res.json({
     username: userInfo.username,
     count: exerciseInfoAgg.length,
