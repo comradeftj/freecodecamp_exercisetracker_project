@@ -66,14 +66,14 @@ app.get('/api/users/:_id/logs', (req, res) => {
 
   if (from !== undefined) {
     dateFrom = new Date(from);
-    exerciseInfo = exerciseInfo.filter((exercise) => exercise.date >= dateFrom);
+    exerciseInfo = exerciseInfo.filter((exercise) => new Date(exercise.date) >= dateFrom);
     console.log('1')
     console.log(dateFrom)
     console.log(exerciseInfo);
   } 
   if (to !== undefined) {
     dateTo = new Date(to);
-    exerciseInfo = exerciseInfo.filter((exercise) => exercise.date <= dateTo);
+    exerciseInfo = exerciseInfo.filter((exercise) => new Date(exercise.date) <= dateTo);
     console.log('2')
     console.log(dateTo)
     console.log(exerciseInfo);
