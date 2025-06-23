@@ -69,18 +69,21 @@ app.get('/api/users/:_id/logs', (req, res) => {
     dateFrom = new Date(from).toDateString();
     exerciseInfo = exerciseInfo.filter((exercise) => exercise.date > dateFrom);
     console.log('1')
+    console.log(dateFrom)
     console.log(exerciseInfo);
   } 
   if (to !== undefined) {
     dateTo = new Date(to).toDateString();
     exerciseInfo = exerciseInfo.filter((exercise) => exercise.date < dateTo);
     console.log('2')
+    console.log(dateTo)
     console.log(exerciseInfo);
   } 
   if (limit !== undefined) {
     currLimit = Number(limit);
     exerciseInfo = exerciseInfo.slice(0, currLimit);
     console.log('3')
+    console.log(currLimit)
     console.log(exerciseInfo);
   } 
   
