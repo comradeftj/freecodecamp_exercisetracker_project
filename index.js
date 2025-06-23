@@ -80,8 +80,6 @@ app.get('/api/users/:_id/logs', (req, res) => {
     duration: exercise.duration,
     date: exercise.date,
   }});
-  console.log('4')
-  console.log(exerciseInfoAgg);
   res.json({
     username: userInfo.username,
     count: exerciseInfoAgg.length,
