@@ -63,7 +63,7 @@ app.get('/api/users/:_id/logs', (req, res) => {
   const _id = req.params._id;
   const userInfo = userData.filter((user) => user._id === _id)[0];
 
-  if (from !== undefined && to !== undefined && limit !== undefined) {
+  if (limit === undefined) {
     from = new Date(from).toDateString();
     to = new Date(to).toDateString();
     limit = Number(limit);
@@ -72,7 +72,24 @@ app.get('/api/users/:_id/logs', (req, res) => {
       description: exercise.description,
       duration: exercise.duration,
       date: exercise.date,
-    }}).slice(0, limit);
+    }});
+
+    res.json({
+      username: userInfo.username,
+      count: exerciseInfoAgg.length,
+      _id: userInfo._id,
+      log: exerciseInfoAgg,
+    })
+  } else if (from === undefined && to === undefined) {
+    from = new Date(from).toDateString();
+    to = new Date(to).toDateString();
+    limit = Number(limit);
+    const exerciseInfo = exerciseData.filter((exercise) => exercise._id === _id && exercise.date >= from && exercise.date <= to);
+    const exerciseInfoAgg = exerciseInfo.map((exercise) => {return {
+      description: exercise.description,
+      duration: exercise.duration,
+      date: exercise.date,
+    }});
 
     res.json({
       username: userInfo.username,
