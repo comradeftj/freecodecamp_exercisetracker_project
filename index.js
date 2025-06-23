@@ -65,27 +65,15 @@ app.get('/api/users/:_id/logs', (req, res) => {
   let exerciseInfo = exerciseData.filter((exercise) => exercise._id === _id);
 
   if (from !== undefined) {
-    dateFrom = new Date(from).toDateString();
-    //exerciseInfo = exerciseInfo.filter((exercise) => exercise.date > dateFrom);
-    let ex = []
-    for (let i = 0; i < exerciseInfo.length; i += 1) {
-      if (exerciseInfo[i].date > dateFrom) {
-        ex.push(exerciseInfo[i])
-      }
-    }
-    exerciseInfo = ex;
+    dateFrom = new Date(from);
+    exerciseInfo = exerciseInfo.filter((exercise) => exercise.date >= dateFrom);
     console.log('1')
     console.log(dateFrom)
     console.log(exerciseInfo);
   } 
   if (to !== undefined) {
-    dateTo = new Date(to).toDateString();
-    //exerciseInfo = exerciseInfo.filter((exercise) => exercise.date < dateTo);
-    for (let i = 0; i < exerciseInfo.length; i += 1) {
-      if (exerciseInfo[i].date > dateTo) {
-        exerciseInfo.splice(i, 1)
-      }
-    }
+    dateTo = new Date(to);
+    exerciseInfo = exerciseInfo.filter((exercise) => exercise.date <= dateTo);
     console.log('2')
     console.log(dateTo)
     console.log(exerciseInfo);
