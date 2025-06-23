@@ -4,7 +4,7 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 require('dotenv').config();
 
-const { userData, exerciseData } = require('./data.js')
+const { userData, exerciseData } = require('./data.js') // array to be used to store data
 
 app.use(cors());
 app.use(express.static('public'));
@@ -63,16 +63,17 @@ app.get('/api/users/:_id/logs', (req, res) => {
   const _id = req.params._id;
   const userInfo = userData.filter((user) => user._id === _id)[0];
   let exerciseInfo = exerciseData.filter((exercise) => exercise._id === _id);
-  console.log(exerciseInfo)
 
   if (from !== undefined) {
     dateFrom = new Date(from).toDateString();
     //exerciseInfo = exerciseInfo.filter((exercise) => exercise.date > dateFrom);
+    let ex = []
     for (let i = 0; i < exerciseInfo.length; i += 1) {
-      if (exerciseInfo[i].date < dateFrom) {
-        exerciseInfo.splice(i, 1)
+      if (exerciseInfo[i].date > dateFrom) {
+        ex.push(exerciseInfo[i])
       }
     }
+    exerciseInfo = ex;
     console.log('1')
     console.log(dateFrom)
     console.log(exerciseInfo);
