@@ -62,29 +62,32 @@ app.get('/api/users/:_id/logs', (req, res) => {
   console.log(from + ' ' + to + ' ' + limit)
   const _id = req.params._id;
   const userInfo = userData.filter((user) => user._id === _id)[0];
-  let exerciseInfo = exerciseData.filter((exercise) => exercise._id === _id);
+  const exerciseInfo = exerciseData.filter((exercise) => exercise._id === _id);
   console.log(exerciseInfo)
 
+  let ifFromDefined = exerciseInfo;
   if (from !== undefined) {
     from = new Date(from).toDateString();
-    exerciseInfo = exerciseInfo.filter((exercise) => exercise.date >= from);
+    ifFromDefined = ifFromDefined.filter((exercise) => exercise.date >= from);
     console.log('1')
-    console.log(exerciseInfo);
+    console.log(ifFromDefined);
   } 
+  let ifToDefined = ifFromDefined;
   if (to !== undefined) {
     to = new Date(to).toDateString();
-    exerciseInfo = exerciseInfo.filter((exercise) => exercise.date <= to);
+    ifToDefined = ifToDefined.filter((exercise) => exercise.date <= to);
     console.log('2')
-    console.log(exerciseInfo);
+    console.log(ifToDefined);
   } 
+  let ifLimitDefined = ifToDefined;
   if (limit !== undefined) {
     limit = Number(limit);
-    exerciseInfo = exerciseInfo.slice(0, limit);
+    ifLimitDefined = ifLimitDefined.slice(0, limit);
     console.log('3')
-    console.log(exerciseInfo);
+    console.log(ifLimitDefined);
   } 
   
-  const exerciseInfoAgg = exerciseInfo.map((exercise) => {return {
+  const exerciseInfoAgg = ifLimitDefined.map((exercise) => {return {
     description: exercise.description,
     duration: exercise.duration,
     date: exercise.date,
