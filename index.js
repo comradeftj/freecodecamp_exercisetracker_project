@@ -53,21 +53,35 @@ app.post('/api/users/:_id/exercises', (req, res) => {
 });
 
 app.get('/api/users/:_id/logs', (req, res) => {
+  let { from, to, limit } = req.query;
   const _id = req.params._id;
   const userInfo = userData.filter((user) => user._id === _id)[0];
-  const exerciseInfo = exerciseData.filter((exercise) => exercise._id === _id);
-  const exerciseInfoAgg = exerciseInfo.map((exercise) => {return {
-    description: exercise.description,
-    duration: exercise.duration,
-    date: exercise.date,
-  }});
 
-  res.json({
-    username: userInfo.username,
-    count: exerciseInfoAgg.length,
-    _id: userInfo._id,
-    log: exerciseInfoAgg,
-  })
+  if (from !== undefined && to !== undefined && limit !== undefined) {
+    from = new Date(from).toDateString();
+    to = new Date(to).toDateString();
+    limit = Number(limit);
+    const exerciseInfo = exerciseData.filter((exercise) => exercise._id === _id && exercise.date >= from && exercise.date <= to);
+    const exerciseInfoAgg = exerciseInfo.map((exercise) => {return {
+      description: exercise.description,
+      duration: exercise.duration,
+      date: exercise.date,
+    }}).limit(limit)
+  } else {
+    const exerciseInfo = exerciseData.filter((exercise) => exercise._id === _id);
+    const exerciseInfoAgg = exerciseInfo.map((exercise) => {return {
+      description: exercise.description,
+      duration: exercise.duration,
+      date: exercise.date,
+    }});
+
+    res.json({
+      username: userInfo.username,
+      count: exerciseInfoAgg.length,
+      _id: userInfo._id,
+      log: exerciseInfoAgg,
+    })
+  }
 })
 
 const listener = app.listen(process.env.PORT || 3000, () => {
