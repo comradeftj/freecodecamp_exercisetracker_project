@@ -37,6 +37,10 @@ app.post('/api/users/:_id/exercises', (req, res) => {
   duration = Number(duration);
   date = date === '' ? new Date().toDateString() : new Date(date).toDateString();
 
+  if (date === 'Invalid Date') {
+    date = new Date().toDateString()
+  };
+
   const user = userData.filter((user) => user._id === _id)[0];
   if (user === undefined) {
     res.json({ error: 'create user first!' });
@@ -52,11 +56,28 @@ app.post('/api/users/:_id/exercises', (req, res) => {
   }
 });
 
-app.get('/api/users/:_id/logs', (req, res) => {
-  let { from, to, limit } = req.query;
+app.get('/api/users/:_id/logs/', (req, res) => {
+  let _id = req.params._id;
   //from=2025-06-23&&to=2025-06-23&&limit=2
-  console.log(from + ' ' + to + ' ' + limit)
-  const _id = req.params._id;
+  const userInfo = userData.filter((user) => user._id === _id)[0];
+  const exerciseInfo = exerciseData.filter((exercise) => exercise._id === _id);
+  const exerciseInfoAgg = exerciseInfo.map((exercise) => {return {
+    description: exercise.description,
+    duration: exercise.duration,
+    date: exercise.date,
+  }});
+
+  res.json({
+    username: userInfo.username,
+    count: exerciseInfoAgg.length,
+    _id: userInfo._id,
+    log: exerciseInfoAgg,
+  })
+});
+
+app.get('/api/users/:_id/logs/:_from/:_to/:_limit', (req, res) => {
+  let { _id, from, to, limit } = req.params;
+  //from=2025-06-23&&to=2025-06-23&&limit=2
   const userInfo = userData.filter((user) => user._id === _id)[0];
 
   if (from !== undefined && to !== undefined && limit !== undefined) {
@@ -69,20 +90,6 @@ app.get('/api/users/:_id/logs', (req, res) => {
       duration: exercise.duration,
       date: exercise.date,
     }}).slice(0, limit);
-
-    res.json({
-      username: userInfo.username,
-      count: exerciseInfoAgg.length,
-      _id: userInfo._id,
-      log: exerciseInfoAgg,
-    })
-  } else {
-    const exerciseInfo = exerciseData.filter((exercise) => exercise._id === _id);
-    const exerciseInfoAgg = exerciseInfo.map((exercise) => {return {
-      description: exercise.description,
-      duration: exercise.duration,
-      date: exercise.date,
-    }});
 
     res.json({
       username: userInfo.username,
