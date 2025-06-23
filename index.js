@@ -66,20 +66,20 @@ app.get('/api/users/:_id/logs', (req, res) => {
   console.log(exerciseInfo)
 
   if (from !== undefined) {
-    from = new Date(from).toDateString();
-    exerciseInfo = exerciseInfo.filter((exercise) => exercise.date > from);
+    dateFrom = new Date(from).toDateString();
+    exerciseInfo = exerciseInfo.filter((exercise) => exercise.date > dateFrom);
     console.log('1')
     console.log(exerciseInfo);
   } 
   if (to !== undefined) {
-    to = new Date(to).toDateString();
-    exerciseInfo = exerciseInfo.filter((exercise) => exercise.date < to);
+    dateTo = new Date(to).toDateString();
+    exerciseInfo = exerciseInfo.filter((exercise) => exercise.date < dateTo);
     console.log('2')
     console.log(exerciseInfo);
   } 
   if (limit !== undefined) {
-    limit = Number(limit);
-    exerciseInfo = exerciseInfo.slice(0, limit);
+    currLimit = Number(limit);
+    exerciseInfo = exerciseInfo.slice(0, currLimit);
     console.log('3')
     console.log(exerciseInfo);
   } 
