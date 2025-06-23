@@ -62,56 +62,33 @@ app.get('/api/users/:_id/logs', (req, res) => {
   console.log(from + ' ' + to + ' ' + limit)
   const _id = req.params._id;
   const userInfo = userData.filter((user) => user._id === _id)[0];
+  let exerciseInfo = exerciseData.filter((exercise) => exercise._id === _id);
 
-  if (limit === undefined) {
+  if (from !== undefined) {
     from = new Date(from).toDateString();
+    exerciseInfo = exerciseInfo.filter((exercise) => exercise.date >= from);
+  } 
+  if (to !== undefined) {
     to = new Date(to).toDateString();
+    exerciseInfo = exerciseInfo.filter((exercise) => exercise.date <= to);
+  } 
+  if (limit !== undefined) {
     limit = Number(limit);
-    const exerciseInfo = exerciseData.filter((exercise) => exercise._id === _id && exercise.date >= from && exercise.date <= to);
-    const exerciseInfoAgg = exerciseInfo.map((exercise) => {return {
-      description: exercise.description,
-      duration: exercise.duration,
-      date: exercise.date,
-    }});
+    exerciseInfo = exerciseInfo.slice(0, limit);
+  } 
+  
+  const exerciseInfoAgg = exerciseInfo.map((exercise) => {return {
+    description: exercise.description,
+    duration: exercise.duration,
+    date: exercise.date,
+  }});
 
-    res.json({
-      username: userInfo.username,
-      count: exerciseInfoAgg.length,
-      _id: userInfo._id,
-      log: exerciseInfoAgg,
-    })
-  } else if (from === undefined && to === undefined) {
-    from = new Date(from).toDateString();
-    to = new Date(to).toDateString();
-    limit = Number(limit);
-    const exerciseInfo = exerciseData.filter((exercise) => exercise._id === _id && exercise.date >= from && exercise.date <= to);
-    const exerciseInfoAgg = exerciseInfo.map((exercise) => {return {
-      description: exercise.description,
-      duration: exercise.duration,
-      date: exercise.date,
-    }});
-
-    res.json({
-      username: userInfo.username,
-      count: exerciseInfoAgg.length,
-      _id: userInfo._id,
-      log: exerciseInfoAgg,
-    })
-  } else {
-    const exerciseInfo = exerciseData.filter((exercise) => exercise._id === _id);
-    const exerciseInfoAgg = exerciseInfo.map((exercise) => {return {
-      description: exercise.description,
-      duration: exercise.duration,
-      date: exercise.date,
-    }});
-
-    res.json({
-      username: userInfo.username,
-      count: exerciseInfoAgg.length,
-      _id: userInfo._id,
-      log: exerciseInfoAgg,
-    })
-  }
+  res.json({
+    username: userInfo.username,
+    count: exerciseInfoAgg.length,
+    _id: userInfo._id,
+    log: exerciseInfoAgg,
+  })
 });
 
 const listener = app.listen(process.env.PORT || 3000, () => {
