@@ -54,6 +54,8 @@ app.post('/api/users/:_id/exercises', (req, res) => {
 
 app.get('/api/users/:_id/logs', (req, res) => {
   let { from, to, limit } = req.query;
+  //from=2025-06-23&&to=2025-06-23&&limit=2
+  console.log(from + ' ' + to + ' ' + limit)
   const _id = req.params._id;
   const userInfo = userData.filter((user) => user._id === _id)[0];
 
@@ -66,7 +68,14 @@ app.get('/api/users/:_id/logs', (req, res) => {
       description: exercise.description,
       duration: exercise.duration,
       date: exercise.date,
-    }}).limit(limit)
+    }}).slice(0, limit);
+
+    res.json({
+      username: userInfo.username,
+      count: exerciseInfoAgg.length,
+      _id: userInfo._id,
+      log: exerciseInfoAgg,
+    })
   } else {
     const exerciseInfo = exerciseData.filter((exercise) => exercise._id === _id);
     const exerciseInfoAgg = exerciseInfo.map((exercise) => {return {
@@ -82,7 +91,7 @@ app.get('/api/users/:_id/logs', (req, res) => {
       log: exerciseInfoAgg,
     })
   }
-})
+});
 
 const listener = app.listen(process.env.PORT || 3000, () => {
   console.log('Your app is listening on port ' + listener.address().port)
