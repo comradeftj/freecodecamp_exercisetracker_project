@@ -63,6 +63,7 @@ app.get('/api/users/:_id/logs', (req, res) => {
   const _id = req.params._id;
   const userInfo = userData.filter((user) => user._id === _id)[0];
   let exerciseInfo = exerciseData.filter((exercise) => exercise._id === _id);
+  console.log(exerciseInfo)
 
   if (from !== undefined) {
     from = new Date(from).toDateString();
